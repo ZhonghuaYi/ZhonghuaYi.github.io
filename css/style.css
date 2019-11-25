@@ -741,9 +741,9 @@ article dd {
   margin: 0 0 0 2em;
 }
 article table {
-  color: #5b6064;
+  color: #fff;
   border-spacing: 0;
-  text-align: center;
+  text-align: left;
   border-collapse: collapse;
   -webkit-box-shadow: 0 0 0 1px #eee;
   box-shadow: 0 0 0 1px #eee;
