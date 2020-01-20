@@ -1,237 +1,442 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-  
-  <title>Django2.2修改默认数据库为MySQL - 凪白枫秋的博客</title>
   <meta charset="UTF-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-  
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/kaede-564x64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/kaede-512x512.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/kaede-64x64.png">
+  <link rel="mask-icon" href="/images/kaede-128x128.svg" color="#222">
 
-  <link rel="shortcut icon" href="/images/kaedeaki.png" type="image/png" />
-  <meta name="description" content="Django2.2修改默认数据库为MySQL刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。 首先，需要在Django项目的settings.py文件里，修改DATABASE设置。 修改为： 12345678910111213DATABASES = &amp;#123;    &amp;apos;default&amp;">
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zhonghuayi.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Django2.2修改默认数据库为MySQL刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。 首先，需要在Django项目的settings.py文件里，修改DATABASE设置。 修改为： 12345678910111213DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django2.2修改默认数据库为MySQL">
 <meta property="og:url" content="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL&#x2F;index.html">
 <meta property="og:site_name" content="凪白枫秋的博客">
-<meta property="og:description" content="Django2.2修改默认数据库为MySQL刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。 首先，需要在Django项目的settings.py文件里，修改DATABASE设置。 修改为： 12345678910111213DATABASES = &amp;#123;    &amp;apos;default&amp;">
-<meta property="og:locale" content="cn">
-<meta property="og:updated_time" content="2019-11-27T11:23:27.973Z">
+<meta property="og:description" content="Django2.2修改默认数据库为MySQL刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。 首先，需要在Django项目的settings.py文件里，修改DATABASE设置。 修改为： 12345678910111213DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-19T16:13:35.750Z">
 <meta name="twitter:card" content="summary">
-  <link rel="stylesheet" href="/css/mdui.min.css">
-  <link rel="stylesheet" href="/css/atom-one-dark.css">
-   
-    <link rel="stylesheet" href="/css/jquery.fancybox.min.css" />
+
+<link rel="canonical" href="https://zhonghuayi.github.io/2019/11/24/Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Django2.2修改默认数据库为MySQL | 凪白枫秋的博客</title>
   
-  
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
-  <link rel="stylesheet" href="/css/style.css?v=1574855197720">
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
-<body class="mdui-drawer-body-left">
-  
-  <div id="nexmoe-background">
-    <div class="nexmoe-bg" style="background-image: url(/images/cover.png)"></div>
-    <div class="mdui-appbar mdui-shadow-0">
-      <div class="mdui-toolbar">
-        <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
-        <div class="mdui-toolbar-spacer"></div>
-        <!--<a href="javascript:;" target="_blank" rel="noopener" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
-        <a href="/" title="凪白枫秋" class="mdui-btn mdui-btn-icon"><img src="/images/kaedeaki.png"></a>
-       </div>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凪白枫秋的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">花开如火，也如寂寞</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
-  <div id="nexmoe-header">
-      <div class="nexmoe-drawer mdui-drawer" id="drawer">
-    <div class="nexmoe-avatar mdui-ripple">
-        <a href="/" title="凪白枫秋">
-            <img src="/images/kaedeaki.png" alt="凪白枫秋">
-        </a>
-    </div>
-    <div class="nexmoe-count">
-        <div><span>Articles</span>4</div>
-        <div><span>Tags</span>0</div>
-        <div><span>Categories</span>0</div>
-    </div>
-    <ul class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/" title="回到首页">
-            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
-            <div class="mdui-list-item-content">
-                回到首页
-            </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/archives" title="文章归档">
-            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
-            <div class="mdui-list-item-content">
-                文章归档
-            </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/html/about.html" title="关于博客">
-            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
-            <div class="mdui-list-item-content">
-                关于博客
-            </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/html/py.html" title="我的朋友">
-            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
-            <div class="mdui-list-item-content">
-                我的朋友
-            </div>
-        </a>
-        
-    </ul>
-    <aside id="nexmoe-sidebar">
-  
-  <div class="nexmoe-widget-wrap">
-    <h3 class="nexmoe-widget-title">Social</h3>
-    <div class="nexmoe-widget nexmoe-social">
-        <a class="mdui-ripple" href="https://space.bilibili.com/131788210" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
-            <i class="nexmoefont icon-bilibili"></i>
-        </a><a class="mdui-ripple" href="https://github.com/ZhonghuaYi" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
-            <i class="nexmoefont icon-github"></i>
-        </a><a class="mdui-ripple" href="https://twitter.com/yizhonghua" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
-            <i class="nexmoefont icon-twitter"></i>
-        </a><a class="mdui-ripple" href="https://www.zhihu.com/people/yi-zhong-hua-31/activities" target="_blank" mdui-tooltip="{content: '知乎'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
-            <i class="nexmoefont icon-zhihu"></i>
-        </a>
-    </div>
 </div>
-  
-  
 
+
+<nav class="site-nav">
   
-  
-  
-  
-  <div class="nexmoe-widget-wrap">
-    <h3 class="nexmoe-widget-title">Archive</h3>
-    <div class="nexmoe-widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li></ul>
-    </div>
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">4</span></a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
 
 
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
   
-</aside>
-    <div class="nexmoe-copyright">
-        &copy; 2019 凪白枫秋
-        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-        & <a href="https://nexmoe.com/hexo-theme-nexmoe.html" target="_blank">Nexmoe</a>
-    </div>
-</div><!-- .nexmoe-drawer -->
-  </div>
-  <div id="nexmoe-content">
-    <div class="nexmoe-primary">
-        <div class="nexmoe-post">
-    <div class="nexmoe-post-cover"> 
-        
-        <img src="/cover_images/19-11-24.png">
-        
-        <h1>Django2.2修改默认数据库为MySQL</h1>
-    </div>
-  <div class="nexmoe-post-meta">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2019年11月24日</a>
-    <a><i class="nexmoefont icon-areachart"></i>911 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 4 分钟</a>
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhonghuayi.github.io/2019/11/24/Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.png">
+      <meta itemprop="name" content="凪白枫秋">
+      <meta itemprop="description" content="至言不出，俗言胜也">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凪白枫秋的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Django2.2修改默认数据库为MySQL
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-24 21:30:01" itemprop="dateCreated datePublished" datetime="2019-11-24T21:30:01+08:00">2019-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-20 00:13:35" itemprop="dateModified" datetime="2020-01-20T00:13:35+08:00">2020-01-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
     
     
-  </div>
-  <article>
-    <h1 id="Django2-2修改默认数据库为MySQL"><a href="#Django2-2修改默认数据库为MySQL" class="headerlink" title="Django2.2修改默认数据库为MySQL"></a>Django2.2修改默认数据库为MySQL</h1><p>刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。</p>
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Django2-2修改默认数据库为MySQL"><a href="#Django2-2修改默认数据库为MySQL" class="headerlink" title="Django2.2修改默认数据库为MySQL"></a>Django2.2修改默认数据库为MySQL</h1><p>刚开始接触Django，发现其使用的数据库是SQLlite，但是我的电脑上已经有MySQL环境，于是打算将其换成MySQL环境，但是也因此踩了很多坑。</p>
 <p>首先，需要在Django项目的settings.py文件里，修改DATABASE设置。</p>
 <p>修改为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;</span><br><span class="line">    &apos;default&apos;: &#123;</span><br><span class="line">        &apos;ENGINE&apos;: &apos;django.db.backends.mysql&apos;,</span><br><span class="line">        &apos;NAME&apos;: &apos;mysite&apos;,  # 数据库名，先前创建的</span><br><span class="line">        &apos;USER&apos;: &apos;root&apos;,     # 用户名，可以自己创建用户</span><br><span class="line">        &apos;PASSWORD&apos;: &apos;******&apos;,  # 密码</span><br><span class="line">        &apos;HOST&apos;: &apos;127.0.0.1&apos;,  # mysql服务所在的主机ip</span><br><span class="line">        &apos;PORT&apos;: &apos;3306&apos;,         # mysql服务端口</span><br><span class="line">        &apos;OPTIONS&apos;: &#123;</span><br><span class="line">            &apos;init_command&apos;: &quot;SET sql_mode=&apos;STRICT_TRANS_TABLES&apos;&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'ENGINE'</span>: <span class="string">'django.db.backends.mysql'</span>,</span><br><span class="line">        <span class="string">'NAME'</span>: <span class="string">'mysite'</span>,  <span class="comment"># 数据库名，先前创建的</span></span><br><span class="line">        <span class="string">'USER'</span>: <span class="string">'root'</span>,     <span class="comment"># 用户名，可以自己创建用户</span></span><br><span class="line">        <span class="string">'PASSWORD'</span>: <span class="string">'******'</span>,  <span class="comment"># 密码</span></span><br><span class="line">        <span class="string">'HOST'</span>: <span class="string">'127.0.0.1'</span>,  <span class="comment"># mysql服务所在的主机ip</span></span><br><span class="line">        <span class="string">'PORT'</span>: <span class="string">'3306'</span>,         <span class="comment"># mysql服务端口</span></span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'init_command'</span>: <span class="string">"SET sql_mode='STRICT_TRANS_TABLES'"</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>具体的异常显示为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django.core.exceptions.ImproperlyConfigured: mysqlclient 1.3.13 or newer is required; you have 0.9.3.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django.core.exceptions.ImproperlyConfigured: mysqlclient 1.3.13 or newer is required; you have 0.9.3.</span><br></pre></td></tr></table></figure>
 
 <p>这里提到了一个包：mysqlclient，如果你的电脑环境中没有mysqlclient包，需要添加这个包：</p>
-<p>如果电脑不是Windows环境，可以直接通过’pip install mysqlclient’添加这个包。</p>
+<p>如果电脑不是Windows环境，可以直接通过<code>pip install mysqlclient</code>添加这个包。</p>
 <p>如果电脑是Windows环境，使用pip会出现错误，需要使用whl包安装。资源地址为</p>
 <p><a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient" target="_blank" rel="noopener">https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient</a> 。在其中找到对应你的python版本和电脑字位的文件，下载。</p>
-<p>下载完成后，进入此whl文件的文件夹，打开cmd（可以按住shift键，点击鼠标右键，在打开的菜单中打开cmd），使用’pip install [whl文件名+后缀]’的形式，安装mysqlclient包。</p>
+<p>下载完成后，进入此whl文件的文件夹，打开cmd（可以按住shift键，点击鼠标右键，在打开的菜单中打开cmd），使用<code>pip install [whl文件名+后缀]</code>的形式，安装mysqlclient包。</p>
 <p>安装完成后，在Django项目的根目录下，使用命令<code>python manage.py migarate</code>命令。但是还是会有这个错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> File &quot;D:\projectTools\anaconda\lib\site-packages\django\db\backends\mysql\base.py&quot;, line 36, in &lt;module&gt;</span><br><span class="line">    raise ImproperlyConfigured(&apos;mysqlclient 1.3.13 or newer is required; you have %s.&apos; % Database.__version__)</span><br><span class="line">django.core.exceptions.ImproperlyConfigured: mysqlclient 1.3.13 or newer is required; you have 0.9.3.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> File "D:\projectTools\anaconda\lib\site-packages\django\db\backends\mysql\base.py", line 36, in &lt;module&gt;</span><br><span class="line">    raise ImproperlyConfigured('mysqlclient 1.3.13 or newer is required; you have %s.' % Database.__version__)</span><br><span class="line">django.core.exceptions.ImproperlyConfigured: mysqlclient 1.3.13 or newer is required; you have 0.9.3.</span><br></pre></td></tr></table></figure>
 
 <p>但是毫无疑问，我的mysqlclient包的版本为1.4.6，已经高于1.3.13版本，按理来说应该不会有这个报错。</p>
 <p>先解决这个异常问题：打开产生错误的base.py文件，是有两行这样的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if version &lt; (1, 3, 13):</span><br><span class="line">    raise ImproperlyConfigured(&apos;mysqlclient 1.3.13 or newer is required; you have %s.&apos; % Database.__version__)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if version &lt; (1, 3, 13):</span><br><span class="line">    raise ImproperlyConfigured('mysqlclient 1.3.13 or newer is required; you have %s.' % Database.__version__)</span><br></pre></td></tr></table></figure>
 
 <p>将这两行代码注释完成后，就不会产生版本错误的警告。（感觉是解决不了问题，就解决提出问题的人）</p>
 <p>再次在django项目根目录运行<code>python manage.py migrate</code>命令，会产生另外一个错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> File &quot;D:\projectTools\anaconda\lib\site-packages\django\db\backends\mysql\operations.py&quot;, line 146, in last_executed_query</span><br><span class="line">    query = query.decode(errors=&apos;replace&apos;)</span><br><span class="line">AttributeError: &apos;str&apos; object has no attribute &apos;decode&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> File "D:\projectTools\anaconda\lib\site-packages\django\db\backends\mysql\operations.py", line 146, in last_executed_query</span><br><span class="line">    query = query.decode(errors='replace')</span><br><span class="line">AttributeError: 'str' object has no attribute 'decode'</span><br></pre></td></tr></table></figure>
 
 <p>意思是query这个str变量没有decode这个方法，因此需要打开operations.py文件（它与上面打开的base.py在同一目录），在146行处，将<code>decode</code>改为<code>encode</code>，保存退出。</p>
 <p>再次运行<code>python manage.py migrate</code>命令，发现命令终于成功运行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Running migrations:</span><br><span class="line">  Applying contenttypes.0001_initial... OK</span><br><span class="line">  Applying auth.0001_initial... OK</span><br><span class="line">  Applying admin.0001_initial... OK</span><br><span class="line">  Applying admin.0002_logentry_remove_auto_add... OK</span><br><span class="line">  Applying admin.0003_logentry_add_action_flag_choices... OK</span><br><span class="line">  Applying contenttypes.0002_remove_content_type_name... OK</span><br><span class="line">  Applying auth.0002_alter_permission_name_max_length... OK</span><br><span class="line">  Applying auth.0003_alter_user_email_max_length... OK</span><br><span class="line">  Applying auth.0004_alter_user_username_opts... OK</span><br><span class="line">  Applying auth.0005_alter_user_last_login_null... OK</span><br><span class="line">  Applying auth.0006_require_contenttypes_0002... OK</span><br><span class="line">  Applying auth.0007_alter_validators_add_error_messages... OK</span><br><span class="line">  Applying auth.0008_alter_user_username_max_length... OK</span><br><span class="line">  Applying auth.0009_alter_user_last_name_max_length... OK</span><br><span class="line">  Applying auth.0010_alter_group_name_max_length... OK</span><br><span class="line">  Applying auth.0011_update_proxy_permissions... OK</span><br><span class="line">  Applying sessions.0001_initial... OK</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Running migrations:</span><br><span class="line">  Applying contenttypes.0001_initial... OK</span><br><span class="line">  Applying auth.0001_initial... OK</span><br><span class="line">  Applying admin.0001_initial... OK</span><br><span class="line">  Applying admin.0002_logentry_remove_auto_add... OK</span><br><span class="line">  Applying admin.0003_logentry_add_action_flag_choices... OK</span><br><span class="line">  Applying contenttypes.0002_remove_content_type_name... OK</span><br><span class="line">  Applying auth.0002_alter_permission_name_max_length... OK</span><br><span class="line">  Applying auth.0003_alter_user_email_max_length... OK</span><br><span class="line">  Applying auth.0004_alter_user_username_opts... OK</span><br><span class="line">  Applying auth.0005_alter_user_last_login_null... OK</span><br><span class="line">  Applying auth.0006_require_contenttypes_0002... OK</span><br><span class="line">  Applying auth.0007_alter_validators_add_error_messages... OK</span><br><span class="line">  Applying auth.0008_alter_user_username_max_length... OK</span><br><span class="line">  Applying auth.0009_alter_user_last_name_max_length... OK</span><br><span class="line">  Applying auth.0010_alter_group_name_max_length... OK</span><br><span class="line">  Applying auth.0011_update_proxy_permissions... OK</span><br><span class="line">  Applying sessions.0001_initial... OK</span><br></pre></td></tr></table></figure>
 
 <p>于是数据库就可以成功更改为MySQL。</p>
 <p>以上是我参考网上其它开发者的解决办法，最后成功解决的。也有开发者提到，可能是因为我们使用的是pymysql包，它的版本是0.9.3，并且python解析时将其当作mysqlclient环境，直接读取其版本信息，才会导致一直报错，因此将版本检测的代码注释就不会有问题。</p>
 
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/21/%E8%AF%95%E8%BF%90%E8%A1%8C/" rel="prev" title="博客试运行">
+      <i class="fa fa-chevron-left"></i> 博客试运行
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/24/%E5%85%B3%E4%BA%8E%E4%BB%A3%E7%A0%81%E5%9D%97%E6%A0%B7%E5%BC%8F/" rel="next" title="关于代码块样式异常">
+      关于代码块样式异常 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
   </article>
   
-    
-<div class="nexmoe-post-copyright">
-<i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
-<strong>Author：</strong>凪白枫秋<br>
-<strong>Link：</strong><a href="https://zhonghuayi.github.io/2019/11/24/Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL/" title="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;2019&#x2F;11&#x2F;24&#x2F;Django2.2%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BAMySQL&#x2F;</a><br>
-
-  <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
-
-</div>
-
-
   
-  <section class="nexmoe-comment">
-    <link rel="stylesheet" href="/css/gitalk.min.css">
-<div id="gitalk"></div>
-<script src="/js/gitalk.min.js"></script>
-<script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        id: window.location.pathname,
-        repo: 'ZhonghuaYi.github.io',
-        owner: 'ZhonghuaYi',
-        admin: 'ZhonghuaYi'
-    })
-    gitalk.render('gitalk')
-</script>
-</section>
-</div>
-    </div>
+  
+
   </div>
-  <script src="/js/mdui.min.js"></script>
-<script src="/js/jquery.min.js"></script>
- 
-    <script src="/js/jquery.fancybox.min.js"></script>
 
 
- 
-    <script src="/js/SmoothScroll.min.js"></script>
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django2-2修改默认数据库为MySQL"><span class="nav-number">1.</span> <span class="nav-text">Django2.2修改默认数据库为MySQL</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="凪白枫秋"
+      src="/images/author.png">
+  <p class="site-author-name" itemprop="name">凪白枫秋</p>
+  <div class="site-description" itemprop="description">至言不出，俗言胜也</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
 
 
-<script src="/js/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 
-<script src="/js/app.js?v=1574855197730"></script>
-<script src="/js/lazysizes.min.js"></script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-    <script type="text/javascript" src="/js/copy.js"></script>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">凪白枫秋</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
 
   
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
 
 </body>
-
 </html>
