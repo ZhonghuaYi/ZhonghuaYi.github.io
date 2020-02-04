@@ -145,17 +145,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">4</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">2</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">3</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">5</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">6</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -255,21 +255,15 @@
 
       
         <p>在学习Django的模型过程中，设置主键自增的问题一直困扰我很久，但是现在还没有完全解决。</p>
-<p>主要的问题出在使用IntegerField或者AutoField上。</p>
-<a id="more"></a>
-<p>一般来讲，是在模型文件中使用<code>id = IntegerField(primerykey=True)</code>即可设置为自增主键。这里我的类定义的很简单：</p>
+<p>主要的问题出在使用IntegerField或者AutoField上。<br><a id="more"></a><br>一般来讲，是在模型文件中使用<code>id = IntegerField(primerykey=True)</code>即可设置为自增主键。这里我的类定义的很简单：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">nb</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    i = models.IntegerField(primary_key=<span class="literal">True</span>)</span><br><span class="line">    title_name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    image_alt = models.CharField(max_length=<span class="number">50</span>)</span><br></pre></td></tr></table></figure>
-
 <p>然后通过python manage.py makemigrations生成迁移文件以及python manage.py migrate执行迁移后，我在MySQL中查看了一下我的表信息，然而却是这样：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field      | Type        | Null | Key | Default | Extra |</span><br><span class="line">+------------+-------------+------+-----+---------+-------+</span><br><span class="line">| i          | int(11)     | NO   | PRI | NULL    |       |</span><br><span class="line">| title_name | varchar(50) | NO   |     | NULL    |       |</span><br><span class="line">| image_alt  | varchar(50) | NO   |     | NULL    |       |</span><br><span class="line">+------------+-------------+------+-----+---------+-------+</span><br></pre></td></tr></table></figure>
-
 <p>可以看到，在主键i的信息描述中，只有标识其为主键，但是并没有标识其为自增。事实上，此时如果在python shell中添加实例时，且不指定i的值，在对实例进行save()时，就会报错，不能成功save。</p>
 <p>然而，如果我使用的是AutoField，即：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">nb</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    i = models.AutoField(primary_key=<span class="literal">True</span>)</span><br><span class="line">    title_name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    image_alt = models.CharField(max_length=<span class="number">50</span>)</span><br></pre></td></tr></table></figure>
-
 <p>迁移之后，再次查看我的表信息，结果如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type        | Null | Key | Default | Extra          |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| i          | int(11)     | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| title_name | varchar(50) | NO   |     | NULL    |                |</span><br><span class="line">| image_alt  | varchar(50) | NO   |     | NULL    |                |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-
 <p>这一次主键的信息中有标识其为自增。在添加实例时，就可以不显式添加主键的值，它自己会自增。不过第一次添加时需要指定主键的值，以作为自增的起始值。当然也可以不指定，它自己会默认为1，但是会跳出一个warnning。</p>
 <p>虽然看起来到这里好像就结束了，但是我在查阅互联网上其它人对于设置主键自增的描述，都是说只需要使用IntegerField就可以。e.g. <a href="https://blog.csdn.net/mapoor/article/details/8609660" target="_blank" rel="noopener">https://blog.csdn.net/mapoor/article/details/8609660</a></p>
 <p>然而我试过了许多次，但是似乎都无效。。。</p>
@@ -318,7 +312,10 @@
     <a href="/2019/11/24/%E5%85%B3%E4%BA%8E%E4%BB%A3%E7%A0%81%E5%9D%97%E6%A0%B7%E5%BC%8F/" rel="prev" title="关于代码块样式异常">
       <i class="fa fa-chevron-left"></i> 关于代码块样式异常
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/04/%E4%BF%A1%E5%8F%B7%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86%EF%BC%881%EF%BC%89/" rel="next" title="信号与系统学习整理（1）">
+      信号与系统学习整理（1） <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -393,20 +390,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -495,6 +492,8 @@
 
 
 
+
+  
 
   
 
