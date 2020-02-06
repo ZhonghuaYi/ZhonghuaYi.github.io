@@ -79,7 +79,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;souce_images&#x2F;signal_and_system_23.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;souce_images&#x2F;signal_and_system_24.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;souce_images&#x2F;signal_and_system_25.png">
-<meta property="og:updated_time" content="2020-02-06T10:59:40.310Z">
+<meta property="og:updated_time" content="2020-02-06T11:53:09.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;zhonghuayi.github.io&#x2F;souce_images&#x2F;signal_and_system_1.png">
 
@@ -261,7 +261,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-06 18:59:40" itemprop="dateModified" datetime="2020-02-06T18:59:40+08:00">2020-02-06</time>
+                <time title="修改时间：2020-02-06 19:53:09" itemprop="dateModified" datetime="2020-02-06T19:53:09+08:00">2020-02-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -466,7 +466,7 @@ N=m\left( \frac{2\pi}{\omega _0} \right)</script><p>19、</p>
 <thead>
 <tr>
 <th style="text-align:center">$e^{j\omega _0t}$</th>
-<th style="text-align:center">$^{j\omega _0n}$</th>
+<th style="text-align:center">$e^{j\omega _0n}$</th>
 </tr>
 </thead>
 <tbody>
@@ -530,9 +530,9 @@ u\left( t \right) =\begin{cases}
 u\left( t \right) =\int_{-\infty}^t{\delta \left( \tau \right) d\tau}</script></li>
 <li><p>The continuous-time unit impulse can be thought of as the <em>first derivative</em>（一阶导数）of the continuous-time unit step:</p>
 <script type="math/tex; mode=display">
-\delta \left( t \right) =\frac{du\left( t \right)}{dt}</script></li>
+\delta \left( t \right) =\frac{du\left( t \right)}{dt}</script><p>7、Since $u(t)$ is <em>discontinuous</em>（不连续）at $t=0$, and consequently is formally <em>not differentiable</em>（不可微）. To make it sense, we rise from the value 0 to the value 1 in a short time interval of length $\varDelta$, as illustrated in figure.</p>
+</li>
 </ul>
-<p>7、Since $u(t)$ is <em>discontinuous</em>（不连续）at $t=0$, and consequently is formally <em>not differentiable</em>（不可微）. To make it sense, we rise from the value 0 to the value 1 in a short time interval of length $\varDelta$, as illustrated in figure.</p>
 <p><img src="\souce_images\signal_and_system_11.png" alt="signal_and_system_11"></p>
 <p><img src="\souce_images\signal_and_system_12.png" alt="signal_and_system_12"></p>
 <p>When $\varDelta \rightarrow 0$, the continuous-time unit impulse will be this form:</p>
@@ -549,19 +549,17 @@ u\left( t \right) =\int_{-\infty}^t{\delta \left( \tau \right) d\tau}=\int_{\inf
 <p><img src="\souce_images\signal_and_system_17.png" alt="signal_and_system_17"></p>
 <p>9、The unit impulse can be used to sample the value of a signal.</p>
 <ul>
-<li><p>For discrete time, since $\delta \left[ n \right] $ is nonzero(and equal to 1) only for $n=0$, it follows that</p>
-<script type="math/tex; mode=display">
-x\left[ n \right] \delta \left[ n \right] =x\left[ 0 \right] \delta \left[ n \right].</script><p>More generally, consider a unit impulse $\delta \left[ n-n_0 \right] $ at $n=n_0$, then</p>
-<script type="math/tex; mode=display">
+<li>For discrete time, since $\delta \left[ n \right] $ is nonzero(and equal to 1) only for $n=0$, it follows that<script type="math/tex; mode=display">
+x\left[ n \right] \delta \left[ n \right] =x\left[ 0 \right] \delta \left[ n \right].</script>More generally, consider a unit impulse $\delta \left[ n-n_0 \right] $ at $n=n_0$, then<script type="math/tex; mode=display">
 x\left[ n \right] \delta \left[ n-n_0 \right] =x\left[ n_0 \right] \delta \left[ n-n_0 \right].</script></li>
 <li><p>For continuous time, we can regard as $x\left( t \right) \delta _{\varDelta}\left( t \right) =x\left( 0 \right) \delta _{\varDelta}\left( t \right) $.</p>
 <p>Since $\delta \left( t \right) $ is the limit as $\varDelta \rightarrow 0$, it follows that</p>
 <script type="math/tex; mode=display">
 x\left( t \right) \delta \left( t \right) =x\left( 0 \right) \delta \left( t \right).</script><p>More generally, there is</p>
 <script type="math/tex; mode=display">
-x\left( t \right) \delta \left( t-t_0 \right) =x\left( t_0 \right) \delta \left( t-t_0 \right).</script></li>
+x\left( t \right) \delta \left( t-t_0 \right) =x\left( t_0 \right) \delta \left( t-t_0 \right).</script><h2 id="1-5-Continuous-time-and-discrete-time-systems"><a href="#1-5-Continuous-time-and-discrete-time-systems" class="headerlink" title="1.5 Continuous-time and discrete-time systems"></a>1.5 Continuous-time and discrete-time systems</h2></li>
 </ul>
-<h2 id="1-5-Continuous-time-and-discrete-time-systems"><a href="#1-5-Continuous-time-and-discrete-time-systems" class="headerlink" title="1.5 Continuous-time and discrete-time systems"></a>1.5 Continuous-time and discrete-time systems</h2><p>1、A system can be viewed as a process in which input signals are transformed by the system or cause the system to respond in some way, resulting in other signals as outputs.</p>
+<p>1、A system can be viewed as a process in which input signals are transformed by the system or cause the system to respond in some way, resulting in other signals as outputs.</p>
 <p>2、A continuous-time system is a system in which continuous-time signals are applied and result in continuous-time output signals. The form like $x\left( t \right) \rightarrow y\left( t \right) $.</p>
 <p><img src="\souce_images\signal_and_system_18.png" alt="signal_and_system_18" style="zoom:150%;" /></p>
 <p>3、A discrete-time system is a system that transform discrete-time inputs into discrete-time outputs. The form like $x\left[ n \right] \rightarrow y\left[ n \right] $.</p>
@@ -597,10 +595,10 @@ y\left[ n \right] =\sum_{k=-\infty}^n{x\left[ k \right]}.</script><p>e.g. 2, <em
 y\left[ n \right] =x\left[ n-1 \right].</script></li>
 <li><p>Continuous-time system with memory:</p>
 <p>e.g., Capacitor ($x(t)$ is the current, while $y(t)$ is the voltage):</p>
-</li>
-</ul>
 <script type="math/tex; mode=display">
-y\left( t \right) =\frac{1}{C}\int_{-\infty}^t{x\left( \tau \right) d\tau}.</script><h3 id="2、Invertibility-and-Inverse-systems"><a href="#2、Invertibility-and-Inverse-systems" class="headerlink" title="2、Invertibility and Inverse systems"></a>2、Invertibility and Inverse systems</h3><p>1、<em>Invertible</em>（可逆性）: A system is said to be invertible if distinct inputs lead to distinct output.</p>
+y\left( t \right) =\frac{1}{C}\int_{-\infty}^t{x\left( \tau \right) d\tau}.</script></li>
+</ul>
+<h3 id="2、Invertibility-and-Inverse-systems"><a href="#2、Invertibility-and-Inverse-systems" class="headerlink" title="2、Invertibility and Inverse systems"></a>2、Invertibility and Inverse systems</h3><p>1、<em>Invertible</em>（可逆性）: A system is said to be invertible if distinct inputs lead to distinct output.</p>
 <p>2、If a system is invertible, then an <em>inverse system</em>（逆系统） that, when cascaded with the original system, yields an output $z\left[ n \right] $ equal to the input $x\left[ n \right] $ to the first system.</p>
 <p>3、The interconnection of a system and its inverse system has an overall input-output relationship which is the same as that for the identity system.</p>
 <p><img src="\souce_images\signal_and_system_24.png" alt="signal_and_system_24"></p>
